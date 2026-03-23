@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <link rel="icon" href="data:;base64,=">
+        <title>文件列表</title>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script type="text/javascript">
+            function confirmDelete() {
+                return confirm('确认删除该文件吗？');
+            }
+
+            function uploadWin(){
+                var vDiv = document.getElementById('div1');
+                vDiv.style.display = 'block';
+                vDiv.style.zIndex = '10';
+                vDiv.style.position = "absolute";
+
+                var vDiv2 = document.getElementById('div2');
+                vDiv2.style.display = 'block';
+                vDiv2.style.zIndex = '11';
+                vDiv2.style.position = "fixed";
+                vDiv2.style.top = "20%";
+                vDiv2.style.left = "50%";
+                vDiv2.style.marginLeft = "-111px";
+                vDiv2.style.marginTop = "-20px";
+            }
+        </script>
+        <style>
+            :root {
+                --bg: #0f1419;
+                --surface: #1a2332;
+                --surface2: #243044;
+                --border: #2d3a4f;
+                --text: #e7ecf3;
+                --muted: #8b9cb3;
+                --accent: #3d8bfd;
+                --accent-hover: #5ba3ff;
+                --danger: #e85d5d;
+                --radius: 12px;
+                --shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+            }
+
+            * {
+                box-sizing: border-box;
+            }
+
+            body {
+                margin: 0;
+                min-height: 100vh;
+                font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+                background: radial-gradient(ellipse 120% 80% at 50% -20%, #1e3a5f 0%, var(--bg) 55%);
+                color: var(--text);
+                text-align: center;
+                padding: 32px 16px 48px;
+            }
+
+            .page {
+                max-width: 720px;
+                margin: 0 auto;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+                font-weight: 600;
+                letter-spacing: 0.02em;
+                margin: 0 0 8px;
+                color: var(--text);
+            }
+
+            .subtitle {
+                font-size: 0.875rem;
+                color: var(--muted);
+                margin-bottom: 28px;
+            }
+
+            .card {
+                background: var(--surface);
+                border: 1px solid var(--border);
+                border-radius: var(--radius);
+                box-shadow: var(--shadow);
+                padding: 24px;
+                margin-bottom: 20px;
+                text-align: left;
+            }
+
+            .card-title {
+                font-size: 0.8rem;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.06em;
+                color: var(--muted);
+                margin-bottom: 16px;
+            }
+
+            #uploadfile {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 12px;
+            }
+
+            #uploadfile input[type="file"] {
+                flex: 1;
+                min-width: 200px;
+                padding: 10px 12px;
+                border: 1px dashed var(--border);
+                border-radius: 8px;
+                background: var(--surface2);
+                color: var(--text);
+                font-size: 0.875rem;
+            }
+
+            #uploadfile input[type="submit"] {
+                padding: 10px 22px;
+                border: none;
+                border-radius: 8px;
+                background: linear-gradient(180deg, var(--accent) 0%, #2563c7 100%);
+                color: #fff;
+                font-size: 0.875rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: transform 0.15s ease, box-shadow 0.15s ease;
+                box-shadow: 0 2px 12px rgba(61, 139, 253, 0.35);
+            }
+
+            #uploadfile input[type="submit"]:hover {
+                background: linear-gradient(180deg, var(--accent-hover) 0%, var(--accent) 100%);
+                transform: translateY(-1px);
+            }
+
+            .table-wrap {
+                overflow-x: auto;
+                border-radius: var(--radius);
+                border: 1px solid var(--border);
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                table-layout: fixed;
+                font-size: 0.875rem;
+                background: var(--surface);
+            }
+
+            thead td {
+                padding: 12px 14px;
+                background: var(--surface2);
+                color: var(--muted);
+                font-weight: 600;
+                font-size: 0.75rem;
+                text-transform: uppercase;
+                letter-spacing: 0.04em;
+                border-bottom: 1px solid var(--border);
+            }
+
+            tbody tr {
+                border-bottom: 1px solid var(--border);
+                transition: background 0.12s ease;
+            }
+
+            tbody tr:hover {
+                background: rgba(61, 139, 253, 0.06);
+            }
+
+            tbody tr:last-child {
+                border-bottom: none;
+            }
+
+            tbody td {
+                padding: 12px 14px;
+                vertical-align: middle;
+            }
+
+            .col1 {
+                text-align: left;
+                word-break: keep-all;
+                word-wrap: break-word;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                color: var(--text);
+            }
+
+            .col2, .col3 {
+                width: 72px;
+                text-align: center;
+            }
+
+            tbody a {
+                color: var(--accent);
+                text-decoration: none;
+                font-weight: 500;
+                padding: 4px 8px;
+                border-radius: 6px;
+                transition: background 0.12s ease, color 0.12s ease;
+            }
+
+            tbody a:hover {
+                background: rgba(61, 139, 253, 0.15);
+                color: var(--accent-hover);
+            }
+
+            tbody a[href^="delete"] {
+                color: var(--danger);
+            }
+
+            tbody a[href^="delete"]:hover {
+                background: rgba(232, 93, 93, 0.12);
+                color: #ff7a7a;
+            }
+
+            #div1 {
+                width: 100%;
+                height: 100%;
+                display: none;
+                text-align: center;
+                background-color: rgba(15, 20, 25, 0.65);
+                backdrop-filter: blur(2px);
+            }
+
+            #div2 {
+                width: 200px;
+                height: 30px;
+                text-align: center;
+                display: none;
+                padding: 30px;
+                font-size: large;
+                background-color: var(--surface);
+                color: var(--text);
+                border-radius: var(--radius);
+                border: 1px solid var(--border);
+                box-shadow: var(--shadow);
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="div1"></div>
+        <div id="div2">正在上传文件...</div>
+
+        <div class="page">
+            <h1>文件列表</h1>
+            <p class="subtitle">上传、下载或删除服务器 <code style="background:var(--surface2);padding:2px 8px;border-radius:6px;font-size:0.8em;">filedir</code> 中的文件</p>
+
+            <div class="card">
+                <div class="card-title">上传文件</div>
+                <form id="uploadfile" action="upload" method="post" enctype="multipart/form-data">
+                    <input type="file" id="upload" name="upload" />
+                    <input type="submit" onclick="uploadWin()" value="上传" />
+                </form>
+            </div>
+
+            <div class="card" style="padding-bottom: 16px;">
+                <div class="card-title">已存储文件</div>
+                <div class="table-wrap">
+                    <table border="0">
+                        <thead>
+                            <tr>
+                                <td class="col1">文件名</td>
+                                <td class="col2"></td>
+                                <td class="col3"></td>
+                            </tr>
+                        </thead>
+<!--filelist_label-->
+                    </table>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
