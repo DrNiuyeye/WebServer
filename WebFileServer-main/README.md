@@ -382,7 +382,3 @@ The server now supports:
 
 User records are stored in `data/users.db`, and login state is tracked with an in-memory session cookie.
 
-## License
-
-如果你准备将该项目开源到 GitHub，建议补充一个明确的开源许可证，例如 `MIT`、`Apache-2.0` 或 `GPL-3.0`，方便他人合法使用和贡献代码。
-
