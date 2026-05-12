@@ -74,12 +74,14 @@ public:
     std::string getStatusLine(const std::string& httpVersion,
                               const std::string& statusCode,
                               const std::string& statusDes);
-    void getFileListPage(std::string& fileListHtml);
+    void getFileListPage(std::string& fileListHtml, const std::string& userName);
     void getFileVec(const std::string dirName, std::vector<std::string>& resVec);
     std::string getMessageHeader(const std::string contentLength,
                                  const std::string contentType,
                                  const std::string redirectLoction = "",
-                                 const std::string contentRange = "");
+                                 const std::string contentRange = "",
+                                 const std::string setCookie = "",
+                                 bool keepAlive = true);
 
 private:
     int m_clientFd;
